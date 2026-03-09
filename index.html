@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crate — Your Vinyl Collection, Elevated</title>
+  <meta name="description" content="Crate is the premium vinyl record tracking app for serious collectors. Scan, discover, and obsess over your collection." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0f0e0c;
+      --card:      #1a1814;
+      --border:    rgba(255,255,255,0.07);
+      --amber:     #e8a020;
+      --amber-dim: rgba(232,160,32,0.12);
+      --cream:     #f0ebe0;
+      --muted:     rgba(240,235,224,0.5);
+      --radius:    16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      background: rgba(15,14,12,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--amber);
+      letter-spacing: 0.03em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--cream); }
+
+    .nav-cta {
+      background: var(--amber);
+      color: #0f0e0c;
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 120px 40px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+      gap: 80px;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: fixed;
+      top: -200px; left: 30%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(232,160,32,0.09) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-text {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--amber-dim);
+      border: 1px solid rgba(232,160,32,0.3);
+      color: var(--amber);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(44px, 5.5vw, 76px);
+      line-height: 1.06;
+      margin-bottom: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--amber);
+    }
+
+    .hero-tagline {
+      font-size: clamp(16px, 1.6vw, 18px);
+      color: var(--muted);
+      max-width: 420px;
+      margin-bottom: 48px;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--amber);
+      color: #0f0e0c;
+      padding: 15px 28px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 14px 24px;
+      border-radius: 100px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-ghost:hover { color: var(--cream); border-color: rgba(255,255,255,0.2); }
+
+    /* HERO PHONE */
+    .hero-phone-wrap {
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* iPhone frame — CSS only */
+    .iphone {
+      position: relative;
+      background: #161412;
+      border-radius: 52px;
+      border: 2px solid rgba(255,255,255,0.13);
+      box-shadow:
+        0 60px 120px rgba(0,0,0,0.75),
+        0 0 0 1px rgba(255,255,255,0.04),
+        inset 0 0 0 1px rgba(0,0,0,0.5);
+      overflow: hidden;
+    }
+
+    .iphone.large {
+      width: 290px;
+      height: 628px;
+    }
+
+    .iphone.medium {
+      width: 220px;
+      height: 476px;
+    }
+
+    /* Dynamic island */
+    .iphone::before {
+      content: '';
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 82px;
+      height: 26px;
+      background: #0a0906;
+      border-radius: 100px;
+      z-index: 10;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
+    }
+
+    .iphone img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    /* Glow under hero phone */
+    .hero-phone-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 220px;
+      height: 80px;
+      background: radial-gradient(ellipse, rgba(232,160,32,0.2) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* SECTION SHARED */
+    section {
+      padding: 100px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .section-body {
+      font-size: 17px;
+      color: var(--muted);
+      max-width: 520px;
+      font-weight: 300;
+    }
+
+    /* SCREENSHOTS SECTION */
+    .screenshots-intro {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+
+    .screenshots-intro .section-body {
+      margin: 0 auto;
+    }
+
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      align-items: end;
+    }
+
+    .screenshot-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    /* Stagger middle phone up */
+    .screenshot-col:nth-child(2) .iphone {
+      transform: translateY(-24px);
+    }
+
+    .screenshot-meta {
+      text-align: center;
+    }
+
+    .screenshot-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--cream);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .screenshot-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 240px;
+    }
+
+    /* EXISTING FEATURES GRID */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 56px;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(232,160,32,0.25);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      font-size: 24px;
+      margin-bottom: 14px;
+      display: block;
+    }
+
+    .feature-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--cream);
+    }
+
+    .feature-body {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* AI SECTION */
+    .ai-section {
+      background: linear-gradient(135deg, #1a1814 0%, #111009 100%);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 72px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      margin: 0 auto;
+      max-width: 1100px;
+    }
+
+    .ai-chat-bubble {
+      background: rgba(232,160,32,0.1);
+      border: 1px solid rgba(232,160,32,0.2);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+      font-size: 15px;
+      color: var(--cream);
+      position: relative;
+    }
+
+    .ai-chat-bubble::before {
+      content: '✦';
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      background: #111009;
+      padding: 2px 6px;
+      color: var(--amber);
+      font-size: 12px;
+    }
+
+    .ai-response {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .ai-rec {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .ai-rec:last-child { border-bottom: none; }
+
+    .ai-rec-disc {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, #2a2620, #1a1814, #2a2620);
+      flex-shrink: 0;
+    }
+
+    .ai-rec-info { flex: 1; }
+
+    .ai-rec-title { font-size: 13px; font-weight: 600; color: var(--cream); }
+    .ai-rec-artist { font-size: 12px; color: var(--muted); }
+
+    .ai-rec-add {
+      font-size: 11px;
+      color: var(--amber);
+      font-weight: 600;
+      background: var(--amber-dim);
+      border: 1px solid rgba(232,160,32,0.2);
+      padding: 4px 10px;
+      border-radius: 100px;
+      cursor: pointer;
+    }
+
+    /* STATS */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 80px;
+    }
+
+    .stat-block {
+      background: var(--card);
+      padding: 48px 40px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 48px;
+      color: var(--amber);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* CTA SECTION */
+    .cta-section {
+      text-align: center;
+    }
+
+    .cta-store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--amber);
+      color: #0f0e0c;
+      padding: 18px 36px;
+      border-radius: 100px;
+      font-size: 17px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+      margin: 0 auto;
+    }
+
+    .cta-store-btn:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    .cta-domain {
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .cta-domain span {
+      color: var(--amber);
+      font-weight: 500;
+    }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0 40px;
+    }
+
+    /* FOOTER */
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--amber);
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 100px 24px 80px;
+        gap: 56px;
+        min-height: unset;
+      }
+
+      .hero-actions { justify-content: center; }
+      .hero-tagline { margin-left: auto; margin-right: auto; }
+
+      .iphone.large {
+        width: 240px;
+        height: 519px;
+      }
+
+      .screenshots-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .screenshot-col:nth-child(2) .iphone {
+        transform: none;
+      }
+
+      .iphone.medium {
+        width: 240px;
+        height: 519px;
+      }
+
+      section { padding: 72px 24px; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+
+      .ai-section {
+        grid-template-columns: 1fr;
+        padding: 40px 24px;
+        gap: 40px;
+      }
+
+      .stats-row {
+        grid-template-columns: 1fr;
+      }
+
+      footer {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .divider { margin: 0 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">Crate</span>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#ai">AI</a></li>
+      <li><a href="#get">Download</a></li>
+    </ul>
+    <a href="#get" class="nav-cta">Get Crate</a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-text">
+      <div class="hero-badge">For Serious Collectors</div>
+      <h1>Your vinyl collection,<br><em>elevated.</em></h1>
+      <p class="hero-tagline">Crate is the premium iOS app for vinyl obsessives. Scan, discover, and dig deeper into every record you own.</p>
+      <div class="hero-actions">
+        <a href="#get" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Download on the App Store
+        </a>
+        <a href="#features" class="btn-ghost">See what's inside →</a>
+      </div>
+    </div>
+
+    <div class="hero-phone-wrap">
+      <div class="iphone large">
+        <img src="s1.png" alt="Crate collection view" />
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREENSHOTS / FEATURES -->
+  <section id="features">
+    <div class="screenshots-intro">
+      <span class="section-label">Built Different</span>
+      <h2 class="section-title">Everything a collector needs.</h2>
+      <p class="section-body">Purpose-built for vinyl. Not a generic app with a vinyl skin.</p>
+    </div>
+
+    <div class="screenshots-grid">
+      <div class="screenshot-col">
+        <div class="iphone medium">
+          <img src="s1.png" alt="Your Collection" />
+        </div>
+        <div class="screenshot-meta">
+          <div class="screenshot-title">Your Collection</div>
+          <div class="screenshot-desc">Every record, perfectly organized. Browse by genre, sort by anything, find it instantly.</div>
+        </div>
+      </div>
+
+      <div class="screenshot-col">
+        <div class="iphone medium">
+          <img src="s2.png" alt="Record detail" />
+        </div>
+        <div class="screenshot-meta">
+          <div class="screenshot-title">Deep Details</div>
+          <div class="screenshot-desc">Tracklists, pressings, and everything in between. Pulled live from Discogs.</div>
+        </div>
+      </div>
+
+      <div class="screenshot-col">
+        <div class="iphone medium">
+          <img src="s3.png" alt="AI Discovery" />
+        </div>
+        <div class="screenshot-meta">
+          <div class="screenshot-title">AI Discovery</div>
+          <div class="screenshot-desc">Ask anything. Find the perfect record for any moment.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- MORE FEATURES -->
+  <section>
+    <span class="section-label">Features</span>
+    <h2 class="section-title">The details that matter.</h2>
+    <p class="section-body">Every decision made for collectors who take their vinyl seriously.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">📷</span>
+        <div class="feature-title">Camera Scan</div>
+        <div class="feature-body">Point your camera at any album cover. Vision OCR reads the text and searches Discogs automatically.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">💿</span>
+        <div class="feature-title">Discogs Integration</div>
+        <div class="feature-body">Full database search with release details, tracklists, cover art, and pressing information.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📦</span>
+        <div class="feature-title">Collection Management</div>
+        <div class="feature-body">Track condition, rating, purchase price, play count, and personal notes for every record.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">❤️</span>
+        <div class="feature-title">Want List</div>
+        <div class="feature-body">Keep a running list of records to hunt for. Swipe to mark as owned the moment you find one.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🎚️</span>
+        <div class="feature-title">Genre Browsing</div>
+        <div class="feature-body">Filter by genre with a tap. Sort by artist, title, year, rating, or date added.</div>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🔍</span>
+        <div class="feature-title">Full-Text Search</div>
+        <div class="feature-body">Search across title, artist, genre, label, notes, and styles simultaneously.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- AI SECTION -->
+  <section id="ai" style="padding: 100px 40px;">
+    <div class="ai-section">
+      <div>
+        <span class="section-label">Powered by AI</span>
+        <h2 class="section-title">Discover music the way you actually think.</h2>
+        <p class="section-body" style="margin-bottom: 24px;">Tell Crate what you're in the mood for. GPT-4o understands vibes, moods, and context — not just keywords.</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:12px;">
+          <li style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);">
+            <span style="color:var(--amber);">✦</span> AI Discover — describe a mood, get recommendations
+          </li>
+          <li style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);">
+            <span style="color:var(--amber);">✦</span> Playlist Generator — curated sets from your actual collection
+          </li>
+          <li style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);">
+            <span style="color:var(--amber);">✦</span> Collection Insights — trends, gaps, and what to add next
+          </li>
+        </ul>
+      </div>
+      <div>
+        <div class="ai-chat-bubble">"Jazz for a late Sunday night, something introspective"</div>
+        <div class="ai-response">
+          <div style="font-size:12px;color:var(--amber);font-weight:600;margin-bottom:12px;letter-spacing:0.05em;">✦ RECOMMENDATIONS</div>
+          <div class="ai-rec">
+            <div class="ai-rec-disc"></div>
+            <div class="ai-rec-info">
+              <div class="ai-rec-title">A Love Supreme</div>
+              <div class="ai-rec-artist">John Coltrane · 1965</div>
+            </div>
+            <div class="ai-rec-add">+ Want</div>
+          </div>
+          <div class="ai-rec">
+            <div class="ai-rec-disc"></div>
+            <div class="ai-rec-info">
+              <div class="ai-rec-title">Quiet Kenny</div>
+              <div class="ai-rec-artist">Kenny Dorham · 1959</div>
+            </div>
+            <div class="ai-rec-add">+ Want</div>
+          </div>
+          <div class="ai-rec">
+            <div class="ai-rec-disc"></div>
+            <div class="ai-rec-info">
+              <div class="ai-rec-title">Solo Monk</div>
+              <div class="ai-rec-artist">Thelonious Monk · 1965</div>
+            </div>
+            <div class="ai-rec-add">+ Want</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- STATS -->
+  <section>
+    <div class="stats-row">
+      <div class="stat-block">
+        <div class="stat-num">8M+</div>
+        <div class="stat-label">Records in Discogs database</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">GPT-4o</div>
+        <div class="stat-label">Powering AI discovery</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num">Dark.</div>
+        <div class="stat-label">First and always</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- CTA -->
+  <section id="get" class="cta-section">
+    <span class="section-label">Download</span>
+    <h2 class="section-title">Start building your crate.</h2>
+    <p class="section-body" style="margin: 0 auto 48px;">Available on iOS. Free to download, built to last.</p>
+    <a href="#" class="cta-store-btn">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Download on the App Store
+    </a>
+    <div class="cta-domain">digwithcrate.com · iOS 17+ · iPhone</div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="divider"></div>
+  <footer>
+    <span class="footer-logo">Crate</span>
+    <span class="footer-copy">© 2026 Crate. Built for collectors, by collectors.</span>
+  </footer>
+
+</body>
+</html>
