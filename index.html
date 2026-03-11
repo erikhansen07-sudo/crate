@@ -218,8 +218,8 @@
     }
 
     .iphone.medium {
-      width: 220px;
-      height: 476px;
+      width: 220px !important;
+      height: 476px !important;
     }
 
     /* Dynamic island */
@@ -303,19 +303,25 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 40px;
+      align-items: start;
     }
 
     .screenshot-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: grid;
+      grid-template-rows: auto auto;
+      justify-items: center;
+      align-items: start;
       gap: 28px;
     }
 
-
+    .screenshot-col .iphone {
+      width: 220px;
+      height: 476px;
+    }
 
     .screenshot-meta {
       text-align: center;
+      width: 100%;
     }
 
     .screenshot-title {
@@ -331,6 +337,7 @@
       color: var(--muted);
       line-height: 1.6;
       max-width: 240px;
+      margin: 0 auto;
     }
 
     /* EXISTING FEATURES GRID */
