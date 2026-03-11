@@ -304,10 +304,6 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 40px;
     }
-    
-    .screenshot-col:nth-child(2) .screenshot-meta {
-      margin-top: 24px;
-    }
 
     .screenshot-col {
       display: flex;
@@ -319,6 +315,11 @@
     /* Stagger middle phone up */
     .screenshot-col:nth-child(2) .iphone {
       transform: translateY(-24px);
+    }
+
+    /* Align middle text with others */
+    .screenshot-col:nth-child(2) .screenshot-meta {
+      margin-top: 24px;
     }
 
     .screenshot-meta {
